@@ -7,6 +7,11 @@ required:true
 },
 email:{
 type: String,
+required:true,
+unique:true
+},
+mobileNumber:{
+type:String,
 required:true
 },
 password:{
@@ -47,7 +52,7 @@ default:false
 }
 )
 
-const User = mongoose.Model("User",UserSchema)
+const User = mongoose.model("User", UserSchema)
 
 module.exports = User
  
