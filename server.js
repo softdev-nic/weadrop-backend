@@ -11,7 +11,7 @@ const userLogin = require("./Controllers/userLogin");
 const userVerification = require("./Controllers/userVerification");
 const auth = require("./Controllers/Middleware/auth");
 const getUserData = require("./Controllers/getdata");
-const isVerified = require("./Controllers/Middleware/isVerified")
+const isVerified = require("./Controllers/Middleware/isVerified");
 const app = express();
 app.set("trust proxy", 1);
 app.use(cors({ origin: [process.env.FRONTEND_URL, "http://localhost:3000"] }));
@@ -19,7 +19,7 @@ app.use(express.json());
 
 app.post("/api/user/register", Limiter({ limit: 10 }), domainValidator, userRegistration);
 app.post("/api/user/login", Limiter(), userLogin);
-app.get("/api/user/verify/:token", userVerification);
+app.get("/api/user/verify/:token", Limiter({ limit: 20 }), userVerification);
 app.get("/api/user/data", auth, isVerified, getUserData);
 
 const PORT = process.env.PORT || 5000;

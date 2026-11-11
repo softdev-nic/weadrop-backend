@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+ const mongoose = require('mongoose')
 
 const UserSchema = new mongoose.Schema({
 name:{
@@ -48,10 +48,6 @@ isBanned:{
 type:Boolean,
 default:false
 },
-isverified:{
-type:Boolean,
-default:false   
-},
 verificationToken:{
 type:String,
 default:null
@@ -75,6 +71,3 @@ default:0
 const User = mongoose.model("User", UserSchema)
 
 module.exports = User
- 
- 
-
