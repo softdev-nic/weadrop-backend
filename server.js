@@ -14,7 +14,7 @@ const getUserData = require("./Controllers/getdata");
 const isVerified = require("./Controllers/Middleware/isVerified");
 const app = express();
 app.set("trust proxy", 1);
-app.use(cors({ origin: [process.env.FRONTEND_URL, "http://localhost:3000"] }));
+app.use(cors({ origin: [process.env.FRONTEND_URL, "https://weadrop-frontend.vercel.app","http://localhost:3000"] }));
 app.use(express.json());
 
 app.post("/api/user/register", Limiter({ limit: 10 }), domainValidator, userRegistration);
