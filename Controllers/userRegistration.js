@@ -30,7 +30,7 @@ const UserRegister = async (req, res) => {
       await userVerificationRequest(newUser.email);
     } catch (mailErr) {
       emailSent = false;
-      console.error("Verification email failed:", mailErr.message);
+      return res.status(500).json({MailErr:mailErr.error})
     }
 
     return res.status(201).json({
