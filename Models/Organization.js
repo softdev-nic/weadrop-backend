@@ -58,7 +58,11 @@ default:false
 isBanned:{
 type:Boolean,
 default:false
-}
+},
+members: [{
+  type: mongoose.Schema.ObjectId,
+  ref:"User"
+}]
 
 }
 )

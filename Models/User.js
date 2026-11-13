@@ -1,6 +1,15 @@
  const mongoose = require('mongoose')
 
 const UserSchema = new mongoose.Schema({
+organizationId :{
+    type:mongoose.Schema.ObjectId,
+    ref:'Organization',
+    default:null
+},
+organizationName:{
+    type:String,
+    default:null
+},
 name:{
 type: String,
 required:true
@@ -47,6 +56,10 @@ default:false
 isBanned:{
 type:Boolean,
 default:false
+},
+isAdmin:{
+type:Boolean,
+Default: false
 },
 verificationToken:{
 type:String,

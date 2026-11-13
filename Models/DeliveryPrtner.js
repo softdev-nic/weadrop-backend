@@ -1,13 +1,15 @@
 const mongoose = require('mongoose')
+const Organization = require('./Organization')
 
 const DPSchema = new mongoose.Schema({
 
-dpId:{
+userId:{
     type:mongoose.Schema.ObjectId,
     requied:true
 },
 organizationId:{
      type:mongoose.Schema.ObjectId,
+     ref:"Organization",
      default:null
 },
 profileImage:{
