@@ -9,9 +9,9 @@ const auth = async (req, res, next) => {
 
     const payload = jwt.verify(token, process.env.ORG_SECRET);
     const organization = await Organization.findById(payload.id).select("-password");
-    if (!organization || organizaton.isBanned) return res.status(401).json({ message: "Access denied" });
+    if (!organization || organization.isBanned) return res.status(401).json({ message: "Access denied" });
 
-    req.user = user;
+    req.organization = organization
     next();
   } catch {
     return res.status(401).json({ message: "Invalid or expired token" });
