@@ -1,6 +1,7 @@
-const bcrypt = require("bcryptjs");
-const Organization = require("../Models/Organization"); 
-const User = require("../Models/User")
+ const bcrypt = require("bcryptjs");
+const Organization = require("../Models/Organization");
+const User = require("../Models/User");
+
 const ORG_TYPES = ["Vendor", "Buyer", "Delivery Partner"];
 
 const GST_REGEX = /^[0-3][0-9][A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/;
@@ -29,11 +30,17 @@ const OrganizationRegister = async (req, res) => {
     }
 
     const normalizedEmail = String(email).trim().toLowerCase();
-    const user = await User.findById(req.user._id)
-    
-    if(!user){
-        return res.status(400).json({error:"User not found"})
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(400).json({ error: "User not found" });
     }
+
+    // one organization per user; a second registration would orphan the first
+    if (user.organizationId) {
+      return res.status(400).json({ error: "You already belong to an organization" });
+    }
+
     const existing = await Organization.findOne({
       $or: [{ email: normalizedEmail }, { gstNumber: gst }],
     });
@@ -50,29 +57,32 @@ const OrganizationRegister = async (req, res) => {
     const organization = await Organization.create({
       companyName,
       organiationType: organizationType, 
-      admin: req.user._id,
+      admin: user._id,
+      members: [user._id], 
       email: normalizedEmail,
       password: hashed,
       profileImage,
       gstNumber: gst,
-      addressLine1, addressLine2, city, state, postalCode
-    
+      addressLine1, addressLine2, city, state, postalCode,
     });
-    organization.members.push(user._id)
 
-    user.organizationId = organization._id
-    user.isAdmin = true
-    user.organizationName = companyName
-    await user.save()
-    await organization.save()
+    // link the user; if this fails, remove the organization so nothing is left half-done
+    try {
+      user.organizationId = organization._id;
+      user.isAdmin = true;
+      user.organizationName = companyName;
+      await user.save();
+    } catch (linkError) {
+      await Organization.deleteOne({ _id: organization._id });
+      throw linkError;
+    }
 
- 
     return res.status(201).json({
       message: "Organization registered.",
       organization: {
         id: organization._id,
         companyName: organization.companyName,
-        organizationType: organization.organizationType,
+        organizationType: organization.organiationType, // was organization.organizationType (undefined)
         email: organization.email,
         isVerified: organization.isVerified,
       },

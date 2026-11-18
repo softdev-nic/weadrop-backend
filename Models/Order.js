@@ -1,7 +1,6 @@
  const mongoose = require("mongoose");
 
-// Model name exactly as registered in your organization schema (typo included).
-// If you rename it to "Organization", change it here.
+ 
 const ORG_MODEL = "Organiation";
 
 const OrderItemSchema = new mongoose.Schema(
