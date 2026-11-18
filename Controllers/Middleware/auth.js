@@ -5,11 +5,11 @@ const auth = async (req, res, next) => {
   try {
     const token = req.headers?.authorization || req.headers?.Authorization;
     
-    if (!token) return res.status(401).json({ message: "Access denied" });
+    if (!token) return res.status(401).json({ message: " User Access denied" });
 
     const payload = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(payload.id).select("-password");
-    if (!user || user.isBanned) return res.status(401).json({ message: "Access denied" });
+    if (!user || user.isBanned) return res.status(401).json({ message: "User Access denied" });
 
     req.user = user;
     next();

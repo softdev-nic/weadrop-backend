@@ -1,7 +1,7 @@
  const mongoose = require("mongoose");
-const Order = require("../Models/Order");
-const Organization = require("../Models/Organization");
-const handleError = require("../Utils/handleError");
+const Order = require("../../Models/Order");
+const Organization = require("../../Models/Organization");
+const handleError = require("../../Utils/HandleError");
 
 const PAYMENT_METHODS = ["COD", "UPI", "Card"];
 
