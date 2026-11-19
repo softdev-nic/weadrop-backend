@@ -19,6 +19,7 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.11.4",
     "multer": "^2.5.0",
+    "razorpay": "^2.9.8",
     "resend": "^6.37.0"
   }
 }

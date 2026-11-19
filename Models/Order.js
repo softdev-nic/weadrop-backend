@@ -1,17 +1,16 @@
  const mongoose = require("mongoose");
 
- 
 const ORG_MODEL = "Organiation";
 
 const OrderItemSchema = new mongoose.Schema(
   {
-    // snapshot of the product at order time, so later price/name changes don't rewrite history
+
     productId: { type: mongoose.Schema.Types.ObjectId, default: null },
     name: { type: String, required: true, trim: true },
     size: { type: String },
     image: { type: String },
     quantity: { type: Number, required: true, min: 1 },
-    unitPrice: { type: Number, required: true, min: 0 }, // rupees
+    unitPrice: { type: Number, required: true, min: 0 },
   },
   { _id: false }
 );
@@ -52,12 +51,11 @@ const OrderSchema = new mongoose.Schema(
         Math.random().toString(36).slice(2, 6).toUpperCase(),
     },
 
-    // the user who placed the order
     placedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    // set when a Buyer organization orders; null for an individual customer
+
     buyerOrganization: { type: mongoose.Schema.Types.ObjectId, ref: ORG_MODEL, default: null },
     vendor: { type: mongoose.Schema.Types.ObjectId, ref: ORG_MODEL, required: true },
-    // the Delivery Partner organization handling it, and the rider (DeliveryPartner profile)
+
     deliveryPartnerOrganization: { type: mongoose.Schema.Types.ObjectId, ref: ORG_MODEL, default: null },
     deliveryPartner: { type: mongoose.Schema.Types.ObjectId, ref: "DeliveryPartner", default: null },
 
@@ -66,7 +64,6 @@ const OrderSchema = new mongoose.Schema(
       validate: [(v) => v.length > 0, "An order needs at least one item"],
     },
 
-    // subtotal and total are always recomputed from items in the pre-validate hook
     subtotal: { type: Number, default: 0, min: 0 },
     deliveryFee: { type: Number, default: 0, min: 0 },
     tax: { type: Number, default: 0, min: 0 },
@@ -90,9 +87,12 @@ const OrderSchema = new mongoose.Schema(
       method: { type: String, enum: ["COD", "UPI", "Card"], default: "COD" },
       status: { type: String, enum: ["Pending", "Paid", "Failed", "Refunded"], default: "Pending" },
       transactionId: { type: String },
+      razorpayOrderId: { type: String, index: true },
+      amountPaise: { type: Number, min: 0 },
+      paidAt: { type: Date },
+      failureReason: { type: String },
     },
 
-    // optional: the weather that prompted the order (e.g. "Rain"); remove if you don't need it
     weatherCondition: { type: String },
     notes: { type: String, maxlength: 300 },
   },
