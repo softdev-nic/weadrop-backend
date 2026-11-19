@@ -20,6 +20,7 @@ const createPaymentOrder = require("./Controllers/Orders/orderPayment");
 const verifyPayment = require("./Controllers/Orders/verifyPayment");
 const paymentWebhook = require("./Controllers/Orders/paymentWebhook");
 const getPaymentStatus = require("./Controllers/Orders/getPaymentAStatus");
+const listVendors = require("./Controllers/Orders/listVendors");
 const app = express();
 app.set("trust proxy", 1);
 app.use(cors({ origin: [process.env.FRONTEND_URL, "https://weadrop-frontend.vercel.app","http://localhost:3000"] }));
@@ -36,6 +37,7 @@ app.post("/api/organization/register", auth, registerOrganization)
 app.post("/api/organization/login", auth, organizationLogin )
 app.post("/api/organization/orders/place",auth,orgAuth, createOrder)
 app.post("/api/orders/place", auth, isVerified, createOrder);
+app.get("/api/vendors", auth, listVendors);
 
 app.post("/api/payments/create", Limiter({ limit: 20 }), auth, isVerified, createPaymentOrder);
 app.post("/api/payments/verify", Limiter({ limit: 20 }), auth, verifyPayment);
