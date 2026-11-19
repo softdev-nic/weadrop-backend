@@ -16,9 +16,16 @@ const organizationLogin = require("./Controllers/organizationLogin")
 const orgAuth = require("./Controllers/Middleware/organizationAuth")
 const getUserData = require("./Controllers/getUserData")
 const createOrder = require("./Controllers/Orders/createOrder")
+const createPaymentOrder = require("./Controllers/Payments/createPaymentOrder");
+const verifyPayment = require("./Controllers/Payments/verifyPayment");
+const paymentWebhook = require("./Controllers/Payments/paymentWebhook");
+const getPaymentStatus = require("./Controllers/Payments/getPaymentStatus");
 const app = express();
 app.set("trust proxy", 1);
 app.use(cors({ origin: [process.env.FRONTEND_URL, "https://weadrop-frontend.vercel.app","http://localhost:3000"] }));
+
+app.post("/api/payments/webhook", express.raw({ type: "application/json" }), paymentWebhook);
+
 app.use(express.json());
 
 app.post("/api/user/register", Limiter({ limit: 10 }), domainValidator, userRegistration);
@@ -28,8 +35,11 @@ app.get("/api/user/data", auth, getUserData);
 app.post("/api/organization/register", auth, registerOrganization)
 app.post("/api/organization/login", auth, organizationLogin )
 app.post("/api/organization/orders/place",auth,orgAuth, createOrder)
+app.post("/api/orders/place", auth, isVerified, createOrder);
 
-
+app.post("/api/payments/create", Limiter({ limit: 20 }), auth, isVerified, createPaymentOrder);
+app.post("/api/payments/verify", Limiter({ limit: 20 }), auth, verifyPayment);
+app.get("/api/payments/status/:orderId", auth, getPaymentStatus);
 
 const PORT = process.env.PORT || 5000;
 
