@@ -1,7 +1,7 @@
-const Order = require("../../Models/Order");
+ const Order = require("../../Models/Order");
 const handleError = require("../../Utils/HandleError");
-const { isValidSignature } = require("../../Utils/Integrations/RazorPay");
-const { markOrderPaid } = require("./markOrderPaid");
+const { isValidSignature } = require("../../Utils/Integrations/RazorPay/RazorPay");
+const { markOrderPaid } = require("./markPaid");
 
 const verifyPayment = async (req, res) => {
   try {

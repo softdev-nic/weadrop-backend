@@ -16,10 +16,10 @@ const organizationLogin = require("./Controllers/organizationLogin")
 const orgAuth = require("./Controllers/Middleware/organizationAuth")
 const getUserData = require("./Controllers/getUserData")
 const createOrder = require("./Controllers/Orders/createOrder")
-const createPaymentOrder = require("./Controllers/Payments/createPaymentOrder");
-const verifyPayment = require("./Controllers/Payments/verifyPayment");
-const paymentWebhook = require("./Controllers/Payments/paymentWebhook");
-const getPaymentStatus = require("./Controllers/Payments/getPaymentStatus");
+const createPaymentOrder = require("./Controllers/Orders/orderPayment");
+const verifyPayment = require("./Controllers/Orders/verifyPayment");
+const paymentWebhook = require("./Controllers/Orders/paymentWebhook");
+const getPaymentStatus = require("./Controllers/Orders/getPaymentAStatus");
 const app = express();
 app.set("trust proxy", 1);
 app.use(cors({ origin: [process.env.FRONTEND_URL, "https://weadrop-frontend.vercel.app","http://localhost:3000"] }));

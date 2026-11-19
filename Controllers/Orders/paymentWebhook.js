@@ -1,5 +1,5 @@
-const Order = require("../../Models/Order");
-const { isValidSignature } = require("../../Utils/Integrations/RazorPay");
+ const Order = require("../../Models/Order");
+const { isValidSignature } = require("../../Utils/Integrations/RazorPay/RazorPay");
 const { markOrderPaid, markOrderFailed } = require("./markPaid");
 
 const paymentWebhook = async (req, res) => {
