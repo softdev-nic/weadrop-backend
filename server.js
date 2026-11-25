@@ -27,6 +27,7 @@ const updateProduct = require("./Controllers/Orders/updateProduct");
 const deleteProduct = require("./Controllers/Orders/deleteProduct");
 const getMyProducts = require("./Controllers/Orders/getMyProducts");
 const { listProducts, getCatalogueOptions } = require("./Controllers/Orders/listProducts");
+const getProductsByCategory = require("./Controllers/Orders/getProductsByCategory");
 const app = express();
 app.set("trust proxy", 1);
 app.use(cors({ origin: [process.env.FRONTEND_URL, "https://weadrop-frontend.vercel.app","http://localhost:3000"] }));
@@ -47,6 +48,7 @@ app.get("/api/vendors", auth, listVendors);
 
 app.get("/api/products/options", getCatalogueOptions);
 app.get("/api/products/mine", auth, vendorOnly, getMyProducts);
+app.get("/api/products/category/:category", auth, getProductsByCategory);
 app.get("/api/products", auth, listProducts);
 app.post("/api/products", auth, isVerified, vendorOnly, createProduct);
 app.put("/api/products/:id", auth, vendorOnly, updateProduct);
