@@ -13,6 +13,7 @@ const userVerificationRequest = async (email) => {
   await user.save();
 
   const link = `${process.env.FRONTEND_URL}/verify-email/${token}`;
+  
 
   await Mailer(
     email,
