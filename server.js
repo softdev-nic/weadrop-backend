@@ -63,7 +63,7 @@ app.post("/api/payments/verify", Limiter({ limit: 20 }), auth, verifyPayment);
 app.get("/api/payments/status/:orderId", auth, getPaymentStatus);
 app.post("/api/dp/register", auth, isVerified, DPRegister);
 app.post("/api/user/forgot-password", userPasswordManager.userForgotPassword)
-api.post("/api/user/reset-password/:token", userPasswordManager.userResetPassword)
+app.post("/api/user/reset-password/:token", userPasswordManager.userResetPassword)
 
 const PORT = process.env.PORT || 5000;
 
