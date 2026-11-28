@@ -31,7 +31,7 @@ const requestPasswordReset = (Model, type, linkType) => {
         { $set: { resetPasswordToken: hashToken(token), resetPasswordExpiry: new Date(Date.now() + RESET_TTL_MS) } }
       );
 
-      const link = `${process.env.FRONTEND_URL}/reset-password/${linkType}/${token}`;
+     const link = `${process.env.FRONTEND_URL}/forgot-password/${linkType.toLowerCase()}/${token}`;
       await Mailer(
         account.email,
         "Reset your password",
