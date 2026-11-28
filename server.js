@@ -29,6 +29,9 @@ const getMyProducts = require("./Controllers/Orders/getMyProducts");
 const { listProducts, getCatalogueOptions } = require("./Controllers/Orders/listProducts");
 const getProductsByCategory = require("./Controllers/Orders/getProductsByCategory");
 const DPRegister = require("./Controllers/dpRegister");
+const userPasswordManager = require("./Controllers/userPasswordManager")
+const OrganizationPasswordManager = require("./Controllers/OrganizationPasswordManager")
+
 const app = express();
 app.set("trust proxy", 1);
 app.use(cors({ origin: [process.env.FRONTEND_URL, "https://weadrop-frontend.vercel.app","http://localhost:3000"] }));
@@ -59,6 +62,8 @@ app.post("/api/payments/create", Limiter({ limit: 20 }), auth, isVerified, creat
 app.post("/api/payments/verify", Limiter({ limit: 20 }), auth, verifyPayment);
 app.get("/api/payments/status/:orderId", auth, getPaymentStatus);
 app.post("/api/dp/register", auth, isVerified, DPRegister);
+app.post("/api/user/forgot-password", userPasswordManager.userForgotPassword)
+
 const PORT = process.env.PORT || 5000;
 
 DBConnect().then(() => {

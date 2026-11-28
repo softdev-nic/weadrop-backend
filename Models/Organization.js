@@ -59,6 +59,14 @@ isBanned:{
 type:Boolean,
 default:false
 },
+resetPasswordToken:{
+type:String,
+default:null
+},
+resetPasswordExpiry:{
+type:Date,
+default:null
+},
 members: [{
   type: mongoose.Schema.ObjectId,
   ref:"User"

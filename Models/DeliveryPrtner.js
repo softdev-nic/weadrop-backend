@@ -3,6 +3,23 @@
 const VEHICLE_TYPES = ["Scooter", "Motorcycle", "Car", "Van"];
 const DL_REGEX = /^[A-Z]{2}[0-9]{2}[ -]?(19|20)[0-9]{2}[0-9]{7}$/;
 
+// GeoJSON point: [longitude, latitude]. Left unset until the partner shares a location,
+// because the 2dsphere index rejects a Point without coordinates.
+const PointSchema = new mongoose.Schema(
+  {
+    type: { type: String, enum: ["Point"], default: "Point", required: true },
+    coordinates: {
+      type: [Number],
+      required: true,
+      validate: {
+        validator: (c) => c.length === 2 && c[0] >= -180 && c[0] <= 180 && c[1] >= -90 && c[1] <= 90,
+        message: "Location must be [longitude, latitude]",
+      },
+    },
+  },
+  { _id: false }
+);
+
 const DeliveryPartnerSchema = new mongoose.Schema(
   {
     userId: {
@@ -49,8 +66,8 @@ const DeliveryPartnerSchema = new mongoose.Schema(
       default: null,
     },
     currentLocation: {
-      type: { type: String, enum: ["Point"], default: "Point" },
-      coordinates: { type: [Number], default: undefined },
+      type: PointSchema,
+      default: undefined,
     },
     isVerified: {
       type: Boolean,
